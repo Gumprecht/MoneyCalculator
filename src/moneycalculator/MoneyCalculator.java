@@ -1,4 +1,3 @@
-
 package moneycalculator;
 
 import java.io.BufferedReader;
@@ -8,23 +7,44 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
-
 public class MoneyCalculator {
-
+    double amount;
+    double exchangerate;
+    String currency;
     
     public static void main(String[] args) throws IOException {
-        System.out.println("Introduce una cantidad de dólares: ");
+        MoneyCalculator moneycalculator = new MoneyCalculator();
+        moneycalculator.control();
+    }
+
+        private void control() throws IOException {
+        input();
+        process();
+        output();
+    }
+
+    private void input() {
+        System.out.println("Introduce una cantidad: ");
         Scanner scanner = new Scanner(System.in);
-        double amount = scanner.nextDouble();
-        double exchangerate = getExchangeRate("USD","EUR");
-        System.out.println(amount + " dolares equivalen a " 
-                + amount*exchangerate + " euros");        
+        amount = scanner.nextDouble();
+        
+        System.out.println("Introduce una divisa: ");
+        currency = scanner.next();
+    }
+
+    private void process() throws IOException {
+        exchangerate = getExchangeRate(currency,"EUR");
+    }
+
+    private void output() {
+        System.out.println(amount + " " + currency + " = " +
+                amount*exchangerate + " euros");
     }
     
     private static double getExchangeRate(String from, String to) throws IOException {
         URL url = 
             new URL("http://free.currencyconverterapi.com/api/v5/convert?q=" +
-                    from + "_" + to + "&compact=y&apiKey=f0fe48bb7e7faed3bae5");
+                    from + "_" + to + "&compact=y");
         URLConnection connection = url.openConnection();
         try (BufferedReader reader = 
                 new BufferedReader(
