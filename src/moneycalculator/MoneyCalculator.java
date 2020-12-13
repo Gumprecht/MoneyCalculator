@@ -8,43 +8,20 @@ import java.net.URLConnection;
 import java.util.Scanner;
 
 public class MoneyCalculator {
-    double amount;
-    double exchangerate;
-    String currency;
-    
+
     public static void main(String[] args) throws IOException {
-        MoneyCalculator moneycalculator = new MoneyCalculator();
-        moneycalculator.control();
-    }
-
-        private void control() throws IOException {
-        input();
-        process();
-        output();
-    }
-
-    private void input() {
-        System.out.println("Introduce una cantidad: ");
+        System.out.println("Introduce una cantidad de dólares: ");
         Scanner scanner = new Scanner(System.in);
-        amount = scanner.nextDouble();
-        
-        System.out.println("Introduce una divisa: ");
-        currency = scanner.next();
-    }
-
-    private void process() throws IOException {
-        exchangerate = getExchangeRate(currency,"EUR");
-    }
-
-    private void output() {
-        System.out.println(amount + " " + currency + " = " +
-                amount*exchangerate + " euros");
+        double amount = scanner.nextDouble();
+        double exchangerate = getExchangeRate("USD","EUR");
+        System.out.println(amount + " dolares equivalen a " 
+                + amount*exchangerate + " euros");        
     }
     
     private static double getExchangeRate(String from, String to) throws IOException {
         URL url = 
             new URL("http://free.currencyconverterapi.com/api/v5/convert?q=" +
-                    from + "_" + to + "&compact=y");
+                    from + "_" + to + "&compact=y&apiKey=f0fe48bb7e7faed3bae5");
         URLConnection connection = url.openConnection();
         try (BufferedReader reader = 
                 new BufferedReader(
@@ -53,5 +30,6 @@ public class MoneyCalculator {
             String line1 = line.substring(line.indexOf(to)+12, line.indexOf("}"));
             return Double.parseDouble(line1);
         }
-    }
+    }    
+    
 }
